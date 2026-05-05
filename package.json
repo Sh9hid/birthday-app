@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "description": "A cinematic birthday tribute for Nitin.",
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 7777",
     "start": "npm run dev",
