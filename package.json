@@ -16,7 +16,8 @@
     "remotion:studio": "remotion studio src/remotion/index.ts",
     "render:landscape": "remotion render src/remotion/index.ts NitinTributeLandscape out/nitin-tribute-landscape.mp4",
     "render:story": "remotion render src/remotion/index.ts NitinTributeStory out/nitin-tribute-story.mp4",
-    "test": "vitest run"
+    "test": "vitest run",
+    "verify:ui": "node scripts/verify-ui.mjs"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
@@ -36,6 +37,7 @@
     "zod": "^4.1.12"
   },
   "devDependencies": {
+    "@playwright/test": "^1.59.1",
     "@remotion/cli": "^4.0.379",
     "@tailwindcss/vite": "^4.1.17",
     "@types/canvas-confetti": "^1.9.0",

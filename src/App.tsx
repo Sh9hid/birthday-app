@@ -1,11 +1,9 @@
 import confetti from "canvas-confetti";
 import gsap from "gsap";
 import { Howl } from "howler";
-import Lenis from "lenis";
 import { AnimatePresence, motion } from "motion/react";
 import { Pause, Play, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { CinematicBackdrop } from "./components/CinematicBackdrop";
 import { tribute } from "./data/tribute";
 
 const scoreUrl = "/audio/nitin-cinematic-score.wav";
@@ -16,20 +14,18 @@ export default function App() {
   const [paused, setPaused] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const timelineRef = useRef<gsap.core.Timeline | null>(null);
-  const scoreRef = useRef<Howl | null>(null);
 
   const score = useMemo(
     () =>
       new Howl({
         src: [scoreUrl],
         html5: true,
-        volume: 0.72
+        volume: 0.6
       }),
     []
   );
 
   useEffect(() => {
-    scoreRef.current = score;
     return () => {
       score.stop();
       score.unload();
@@ -37,123 +33,120 @@ export default function App() {
   }, [score]);
 
   useEffect(() => {
-    const lenis = new Lenis({
-      smoothWheel: true,
-      lerp: 0.08
-    });
-
-    let frame = 0;
-    const raf = (time: number) => {
-      lenis.raf(time);
-      frame = requestAnimationFrame(raf);
-    };
-    frame = requestAnimationFrame(raf);
-    return () => {
-      cancelAnimationFrame(frame);
-      lenis.destroy();
-    };
-  }, []);
-
-  useEffect(() => {
     if (!started || !rootRef.current) return;
 
     const ctx = gsap.context(() => {
       const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const speed = prefersReduced ? 0.45 : 1;
+      const speed = prefersReduced ? 0.65 : 1;
+      const tributeLines = gsap.utils.toArray<HTMLElement>(".tribute-line");
+      const finalLines = gsap.utils.toArray<HTMLElement>(".final-line");
+      const photoCards = gsap.utils.toArray<HTMLElement>(".photo-card");
+      const slotTrack = rootRef.current?.querySelector<HTMLElement>(".slot-track");
+      const slotItem = rootRef.current?.querySelector<HTMLElement>(".slot-track span");
+      const slotDistance = slotItem ? slotItem.offsetHeight * (tribute.gratitudeWords.length - 1) : 0;
+
+      gsap.set(".stage", { autoAlpha: 0, clearProps: "transform" });
+      gsap.set([".hero-title span", ".name-burst span"], { autoAlpha: 0, y: 18 });
+      gsap.set([".chat-line span", ".virtue-word"], { autoAlpha: 0 });
+      gsap.set(photoCards, { autoAlpha: 0, y: 24, scale: 0.985 });
+      gsap.set(".slot-machine", { autoAlpha: 0, y: 10 });
+      gsap.set(".slot-track", { y: 0 });
+
       const tl = gsap.timeline({
-        defaults: { ease: "power3.out" },
+        defaults: { ease: "power2.out" },
         onComplete: () => {
           confetti({
-            particleCount: 180,
-            spread: 80,
-            origin: { y: 0.65 },
-            colors: ["#f5d26b", "#f9fafb", "#87f5ff", "#ff7ab6"]
+            particleCount: 90,
+            spread: 66,
+            origin: { y: 0.68 },
+            colors: ["#b37b22", "#ffffff", "#8bb8d8", "#f1c7b8"]
           });
         }
       });
 
       timelineRef.current = tl;
 
-      const tributeLines = gsap.utils.toArray<HTMLElement>(".tribute-line");
-      const finalLines = gsap.utils.toArray<HTMLElement>(".final-line");
-
       tl.set(".scene", { autoAlpha: 1 })
-        .from(".eyebrow", { autoAlpha: 0, y: 14, duration: 0.7 * speed })
-        .from(".hero-title span", { autoAlpha: 0, yPercent: 110, rotateX: -45, stagger: 0.06, duration: 0.86 * speed }, "-=0.2")
-        .from(".hero-subtitle", { autoAlpha: 0, y: 20, duration: 0.8 * speed }, "-=0.25")
-        .to(".opening", { autoAlpha: 0, y: -30, duration: 0.8 * speed }, "+=1.35")
-        .from(".chat-card", { autoAlpha: 0, y: 40, scale: 0.94, duration: 0.7 * speed })
-        .from(".chat-line span", { autoAlpha: 0, duration: 0.03 * speed, stagger: 0.018 * speed, ease: "none" })
-        .from(".send-button", { autoAlpha: 0, scale: 0.7, duration: 0.25 * speed })
-        .to(".send-button", { backgroundColor: "#f5d26b", color: "#111827", duration: 0.2 * speed })
-        .to(".chat-card", { autoAlpha: 0, y: -70, scale: 0.92, duration: 0.55 * speed }, "+=0.55")
-        .from(".pivot-line", { autoAlpha: 0, y: 30, stagger: 0.65, duration: 0.7 * speed })
-        .to(".pivot-line .spotlight", { color: "#f5d26b", textShadow: "0 0 36px rgba(245,210,107,.9)", duration: 0.55 * speed })
-        .to(".pivot", { autoAlpha: 0, scale: 0.92, duration: 0.65 * speed }, "+=1")
+        .to(".opening", { autoAlpha: 1, duration: 0.2 * speed })
+        .from(".eyebrow", { autoAlpha: 0, y: 10, duration: 0.85 * speed })
+        .to(".hero-title span", { autoAlpha: 1, y: 0, stagger: 0.08, duration: 0.82 * speed }, "-=0.15")
+        .from(".hero-subtitle", { autoAlpha: 0, y: 16, duration: 0.85 * speed }, "+=0.05")
+        .to(".opening", { autoAlpha: 0, y: -16, duration: 0.8 * speed }, "+=1.75")
+        .to(".chat", { autoAlpha: 1, duration: 0.35 * speed }, "<0.35")
+        .from(".chat-card", { y: 24, scale: 0.985, duration: 0.8 * speed })
+        .to(".chat-line span", { autoAlpha: 1, duration: 0.022 * speed, stagger: 0.022 * speed, ease: "none" })
+        .from(".send-button", { autoAlpha: 0, scale: 0.9, duration: 0.28 * speed })
+        .to(".send-button", { backgroundColor: "#b37b22", color: "#ffffff", duration: 0.25 * speed })
+        .to(".chat", { autoAlpha: 0, y: -24, duration: 0.7 * speed }, "+=0.95")
+        .to(".pivot", { autoAlpha: 1, duration: 0.35 * speed }, "<0.32")
+        .from(".pivot-line", { autoAlpha: 0, y: 22, stagger: 0.82, duration: 0.8 * speed })
+        .to(".pivot-line .spotlight", { color: "#9b6a1d", duration: 0.55 * speed })
+        .to(".pivot", { autoAlpha: 0, scale: 0.985, duration: 0.75 * speed }, "+=1.35")
+        .to(".virtues", { autoAlpha: 1, duration: 0.35 * speed }, "<0.32")
         .fromTo(
           ".virtue-word",
           {
             autoAlpha: 0,
-            x: () => gsap.utils.random(-420, 420),
-            y: () => gsap.utils.random(-280, 280),
-            rotate: () => gsap.utils.random(-18, 18),
-            scale: () => gsap.utils.random(0.7, 1.25)
+            x: () => gsap.utils.random(-240, 240),
+            y: () => gsap.utils.random(-150, 150),
+            scale: 0.9
           },
           {
             autoAlpha: 1,
             x: 0,
             y: 0,
-            rotate: 0,
             scale: 1,
-            duration: 0.18 * speed,
+            duration: 0.28 * speed,
             stagger: 0.055 * speed,
-            ease: "expo.out"
+            ease: "power3.out"
           }
         )
-        .to(".virtue-word", {
-          autoAlpha: 0,
-          x: () => gsap.utils.random(-620, 620),
-          y: () => gsap.utils.random(-360, 360),
-          rotate: () => gsap.utils.random(-26, 26),
-          duration: 0.16 * speed,
-          stagger: 0.035 * speed,
-          ease: "expo.in"
-        }, "-=1.55")
-        .from(".name-burst span", { autoAlpha: 0, yPercent: 105, rotateX: -70, stagger: 0.08, duration: 0.75 * speed })
-        .to(".name-burst span", { color: "#f5d26b", duration: 0.35 * speed, stagger: 0.05 })
-        .to(".name-burst", { autoAlpha: 0, scale: 1.08, filter: "blur(10px)", duration: 0.55 * speed }, "+=0.75");
+        .to(".virtue-word", { autoAlpha: 0, y: -16, duration: 0.28 * speed, stagger: 0.03 * speed }, "-=1.05")
+        .to(".name-burst span", { autoAlpha: 1, y: 0, stagger: 0.12, duration: 0.82 * speed })
+        .to(".name-burst span", { color: "#9b6a1d", duration: 0.45 * speed, stagger: 0.05 })
+        .to(".virtues", { autoAlpha: 0, scale: 1.015, duration: 0.8 * speed }, "+=1.05")
+        .to(".tribute-copy", { autoAlpha: 1, duration: 0.35 * speed }, "<0.32");
 
       tributeLines.forEach((line, index) => {
         const isLast = index === tributeLines.length - 1;
-        tl.fromTo(line, { autoAlpha: 0, y: 28 }, { autoAlpha: 1, y: 0, duration: 0.72 * speed })
-          .to(line, { autoAlpha: isLast ? 1 : 0, y: isLast ? 0 : -22, duration: isLast ? 0.2 * speed : 0.48 * speed }, "+=0.95");
+        tl.fromTo(line, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.9 * speed })
+          .to(line, { autoAlpha: isLast ? 1 : 0, y: isLast ? 0 : -14, duration: isLast ? 0.2 * speed : 0.62 * speed }, "+=1.55");
       });
 
-      tl.to(".tribute-copy", { autoAlpha: 0, y: -24, duration: 0.65 * speed }, "+=0.8")
-        .from(".portrait-shell", { autoAlpha: 0, scale: 0.82, rotate: -2, duration: 0.9 * speed })
-        .from(".portrait-copy", { autoAlpha: 0, y: 30, duration: 0.8 * speed }, "-=0.35")
-        .from(".photo-card", { autoAlpha: 0, y: 60, rotate: -4, stagger: 0.18, duration: 0.7 * speed }, "+=0.35")
-        .to(".photo-card", { y: -14, stagger: 0.08, yoyo: true, repeat: 1, duration: 0.5 * speed })
-        .to(".portrait-scene", { autoAlpha: 0, y: -28, duration: 0.75 * speed }, "+=1.35");
+      tl.to(".tribute-copy", { autoAlpha: 0, y: -18, duration: 0.7 * speed }, "+=0.9")
+        .to(".portrait-scene", { autoAlpha: 1, duration: 0.35 * speed }, "<0.32")
+        .from(".portrait-shell", { autoAlpha: 0, scale: 0.93, y: 24, duration: 1.05 * speed })
+        .from(".portrait-copy", { autoAlpha: 0, y: 20, duration: 0.85 * speed }, "-=0.25")
+        .to(".portrait-shell, .portrait-copy", { autoAlpha: 0, y: -14, duration: 0.72 * speed }, "+=1.55");
+
+      photoCards.forEach((card, index) => {
+        tl.to(card, { autoAlpha: 1, y: 0, scale: 1, duration: 0.7 * speed }, index === 0 ? "<0.35" : "<0.25")
+          .to(card, { autoAlpha: 0, y: -14, scale: 0.985, duration: 0.62 * speed }, "+=1.6");
+      });
+
+      tl.to(".portrait-scene", { autoAlpha: 0, y: -18, duration: 0.8 * speed }, "+=0.7")
+        .to(".finale", { autoAlpha: 1, duration: 0.35 * speed }, "<0.32");
 
       finalLines.slice(0, 3).forEach((line, index) => {
-        tl.fromTo(line, { autoAlpha: 0, y: 28 }, { autoAlpha: 1, y: 0, duration: 0.76 * speed })
-          .to(line, { autoAlpha: index === 2 ? 1 : 0, y: index === 2 ? 0 : -22, duration: index === 2 ? 0.2 * speed : 0.48 * speed }, "+=1.15");
+        tl.fromTo(line, { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.8 * speed })
+          .to(line, { autoAlpha: index === 2 ? 1 : 0, y: index === 2 ? 0 : -14, duration: index === 2 ? 0.2 * speed : 0.55 * speed }, "+=1.35");
       });
 
-      tl.fromTo(
-        ".slot-track",
-        { yPercent: 0 },
-        { yPercent: -97.5, duration: 3.2 * speed, ease: "power4.out" },
-        "+=0.15"
-      )
-        .fromTo(".everything-line", { autoAlpha: 0, y: 40, scale: 0.94 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.85 * speed })
-        .to(".final-line:nth-child(3), .slot-machine", { autoAlpha: 0, y: -24, duration: 0.45 * speed }, "+=0.15")
-        .from(".replay-row", { autoAlpha: 0, y: 18, duration: 0.5 * speed });
+      tl.to(".slot-machine", { autoAlpha: 1, y: 0, duration: 0.3 * speed }, "+=0.1");
+
+      if (slotTrack) {
+        tl.to(slotTrack, { y: -slotDistance, duration: 4.6 * speed, ease: "power4.out" });
+      }
+
+      tl
+        .to(".slot-machine", { boxShadow: "0 18px 60px rgba(179, 123, 34, 0.24)", duration: 0.35 * speed })
+        .to(".final-line:nth-child(3)", { autoAlpha: 0, y: -12, duration: 0.45 * speed }, "+=0.35")
+        .fromTo(".everything-line", { autoAlpha: 0, y: 26, scale: 0.985 }, { autoAlpha: 1, y: 0, scale: 1, duration: 0.9 * speed })
+        .from(".replay-row", { autoAlpha: 0, y: 12, duration: 0.55 * speed }, "+=0.6");
     }, rootRef);
 
     return () => ctx.revert();
-  }, [started]);
+  }, [started, score]);
 
   const begin = () => {
     setStarted(true);
@@ -170,7 +163,6 @@ export default function App() {
     score.play();
     score.mute(muted);
     setPaused(false);
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const toggleMute = () => {
@@ -196,25 +188,19 @@ export default function App() {
 
   return (
     <main ref={rootRef} className="app-shell">
-      <CinematicBackdrop active={started} />
-
       <AnimatePresence>
         {!started && (
           <motion.section
             className="start-screen"
             initial={{ opacity: 1 }}
-            exit={{ opacity: 0, scale: 1.02, transition: { duration: 0.7 } }}
+            exit={{ opacity: 0, transition: { duration: 0.55 } }}
           >
-            <div className="start-photo" style={{ backgroundImage: `url("${tribute.heroImage}")` }} />
             <div className="start-content">
-              <p className="kicker">A birthday film from the office family</p>
+              <p className="kicker">A birthday note</p>
               <h1>For Nitin</h1>
-              <p>
-                A few words, a lot of gratitude, and one cinematic pause for the person who makes the room feel steady.
-              </p>
-              <motion.button whileTap={{ scale: 0.97 }} whileHover={{ scale: 1.03 }} onClick={begin}>
+              <motion.button whileTap={{ scale: 0.96 }} whileHover={{ scale: 1.02 }} onClick={begin}>
                 <Play size={20} fill="currentColor" />
-                Tap to begin
+                Play
               </motion.button>
             </div>
           </motion.section>
@@ -277,7 +263,6 @@ export default function App() {
         <div className="portrait-scene stage">
           <div className="portrait-shell">
             <img src={tribute.heroImage} alt="Nitin smiling outdoors" />
-            <div className="portrait-glow" />
           </div>
           <div className="portrait-copy">
             <p>Mentor. Standard-setter. The heart of the team.</p>
