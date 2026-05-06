@@ -39,22 +39,29 @@ const fireConfetti = options => {
 
 const runPhotoConfetti = () => {
   fireConfetti({
-    particleCount: 140,
+    particleCount: 170,
     spread: 74,
-    startVelocity: 36,
+    startVelocity: 38,
     origin: { y: 0.62 }
   });
   fireConfetti({
-    particleCount: 70,
+    particleCount: 85,
     angle: 60,
     spread: 55,
     origin: { x: 0, y: 0.7 }
   });
   fireConfetti({
-    particleCount: 70,
+    particleCount: 85,
     angle: 120,
     spread: 55,
     origin: { x: 1, y: 0.7 }
+  });
+  fireConfetti({
+    particleCount: 80,
+    spread: 100,
+    startVelocity: 28,
+    scalar: 0.85,
+    origin: { x: 0.5, y: 0.12 }
   });
 };
 
@@ -106,6 +113,24 @@ const runFinaleConfetti = () => {
   };
 
   setTimeout(rain, 520);
+};
+
+const playNameCelebration = () => {
+  const name = document.querySelector(".celebration-name");
+
+  if (!name) {
+    return;
+  }
+
+  name.classList.remove("animate__animated", "animate__jackInTheBox", "animate__heartBeat");
+  void name.offsetWidth;
+  name.classList.add("animate__animated", "animate__jackInTheBox");
+
+  setTimeout(() => {
+    name.classList.remove("animate__jackInTheBox");
+    void name.offsetWidth;
+    name.classList.add("animate__heartBeat");
+  }, 900);
 };
 
 // Animation Timeline
@@ -299,7 +324,34 @@ const animationTimeline = () => {
     )
     .call(() => {
       runPhotoConfetti();
+      playNameCelebration();
     })
+    .fromTo(
+      ".celebration-name",
+      0.75,
+      {
+        opacity: 0,
+        scale: 0.55,
+        y: 20
+      },
+      {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        ease: Back.easeOut.config(1.7)
+      }
+    )
+    .to(
+      ".celebration-name",
+      0.45,
+      {
+        opacity: 0,
+        scale: 1.08,
+        y: -22,
+        ease: Power1.easeIn
+      },
+      "+=1"
+    )
     .from(
       ".lydia-dp",
       0.9,
@@ -309,7 +361,7 @@ const animationTimeline = () => {
         y: 38,
         ease: Expo.easeOut
       },
-      "-=2"
+      "-=0.1"
     )
     .from(".hat", 0.5, {
       x: -100,
