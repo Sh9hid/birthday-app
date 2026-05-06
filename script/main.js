@@ -25,13 +25,37 @@ const fetchData = () => {
 };
 
 const confettiColors = ["#ff69b4", "#ffd166", "#7bdff2", "#b2f7ef", "#f7d6e0", "#ffffff", "#15a1ed"];
+let confettiLauncher;
+
+const getConfettiLauncher = () => {
+  if (!window.confetti) {
+    return null;
+  }
+
+  const canvas = document.getElementById("confetti-canvas");
+
+  if (canvas && window.confetti.create) {
+    if (!confettiLauncher) {
+      confettiLauncher = window.confetti.create(canvas, {
+        resize: true,
+        useWorker: true
+      });
+    }
+
+    return confettiLauncher;
+  }
+
+  return window.confetti;
+};
 
 const fireConfetti = options => {
-  if (!window.confetti) {
+  const launcher = getConfettiLauncher();
+
+  if (!launcher) {
     return;
   }
 
-  window.confetti(Object.assign({
+  launcher(Object.assign({
     colors: confettiColors,
     disableForReducedMotion: true,
     zIndex: 9999
