@@ -48,6 +48,7 @@ body {
 
 h1.one {
   line-height: 1;
+  margin-bottom: 0;
 }
 
 h1.one span:first-child {
@@ -59,11 +60,12 @@ h1.one span:first-child {
 
 h1.one span:last-child {
   display: block;
-  margin-top: 0.15em;
-  font-size: clamp(4.4rem, 13vw, 9rem);
+  margin-top: 0.08em;
+  font-family: "Great Vibes", cursive;
+  font-size: clamp(5.4rem, 15vw, 10.5rem);
   font-weight: 400;
   letter-spacing: 0;
-  background: linear-gradient(135deg, #111827, #15a1ed 55%, #ff69b4);
+  background: linear-gradient(135deg, #101827, #185a9d 58%, #d43f8d);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -86,8 +88,7 @@ h1.one span:last-child {
   width: min(360px, 68vw);
   max-height: 90px;
   object-fit: contain;
-  margin: 18px auto 0;
-  filter: drop-shadow(0 16px 28px rgba(17, 24, 39, 0.12));
+  margin: 8px auto 0;
 }
 
 .three {
@@ -333,7 +334,7 @@ h1.one span:last-child {
   .brand-logo {
     width: min(300px, 76vw);
     max-height: 76px;
-    margin-top: 14px;
+    margin-top: 6px;
   }
 
   .six .lydia-dp {
