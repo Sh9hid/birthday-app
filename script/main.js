@@ -197,17 +197,45 @@ const animationTimeline = () => {
     )
     .staggerFromTo(
       ".baloons img",
-      2.5,
+      3.2,
       {
-        opacity: 0.9,
-        y: 1400
+        opacity: 0,
+        y: 900,
+        scale: 0.55,
+        rotation: -8
       },
       {
-        opacity: 1,
-        y: -1000
+        opacity: 0.92,
+        y: -820,
+        scale: 1,
+        rotation: 8,
+        ease: Power1.easeOut
       },
-      0.2
+      0.12
     )
+    .call(() => {
+      if (window.confetti) {
+        window.confetti({
+          particleCount: 140,
+          spread: 74,
+          startVelocity: 36,
+          origin: { y: 0.62 },
+          colors: ["#15a1ed", "#ff69b4", "#ffd166", "#ffffff"]
+        });
+        window.confetti({
+          particleCount: 70,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0, y: 0.7 }
+        });
+        window.confetti({
+          particleCount: 70,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1, y: 0.7 }
+        });
+      }
+    })
     .from(
       ".lydia-dp",
       0.9,
@@ -286,7 +314,9 @@ const animationTimeline = () => {
       ".last-smile",
       0.5,
       {
-        rotation: 90
+        rotation: 90,
+        transformOrigin: "50% 50%",
+        ease: Power1.easeOut
       },
       "+=1"
     );
