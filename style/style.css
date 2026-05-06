@@ -259,6 +259,14 @@ h1.one span:last-child {
   font-weight: lighter;
 }
 
+.nine .final-note {
+  max-width: min(760px, 88vw);
+  margin: 18px auto 0;
+  color: rgba(31, 41, 51, 0.72);
+  font-size: clamp(1.05rem, 2.3vw, 1.45rem);
+  line-height: 1.45;
+}
+
 #replay {
   z-index: 3;
   cursor: pointer;
@@ -339,5 +347,12 @@ h1.one span:last-child {
   .nine p {
     font-size: 1.5rem;
     font-weight: lighter;
+  }
+
+  .nine .final-note {
+    max-width: 86vw;
+    margin-top: 16px;
+    font-size: 1rem;
+    line-height: 1.5;
   }
 }
