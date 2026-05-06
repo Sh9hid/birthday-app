@@ -44,11 +44,13 @@ body {
 
 .one {
   font-size: 4.5rem;
+  overflow: visible;
 }
 
 h1.one {
-  line-height: 1;
+  line-height: 1.12;
   margin-bottom: 0;
+  overflow: visible;
 }
 
 h1.one span:first-child {
@@ -60,9 +62,10 @@ h1.one span:first-child {
 
 h1.one span:last-child {
   display: block;
-  margin-top: 0.08em;
+  margin-top: 0.02em;
   font-family: "Great Vibes", cursive;
-  font-size: clamp(5.4rem, 15vw, 10.5rem);
+  font-size: clamp(6.4rem, 17vw, 12rem);
+  line-height: 1.14;
   font-weight: 400;
   letter-spacing: 0;
   background: linear-gradient(135deg, #101827, #185a9d 58%, #d43f8d);
@@ -81,6 +84,18 @@ h1.one span:last-child {
 .two {
   font-size: 1.2rem;
   font-weight: lighter;
+  margin-top: 0;
+}
+
+.logo-kicker {
+  display: block;
+  margin: -4px 0 8px;
+  color: rgba(31, 41, 51, 0.54);
+  font-size: 0.78rem;
+  font-weight: 400;
+  letter-spacing: 0.16em;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .brand-logo {
@@ -88,7 +103,7 @@ h1.one span:last-child {
   width: min(360px, 68vw);
   max-height: 90px;
   object-fit: contain;
-  margin: 8px auto 0;
+  margin: 0 auto;
 }
 
 .three {
@@ -334,7 +349,12 @@ h1.one span:last-child {
   .brand-logo {
     width: min(300px, 76vw);
     max-height: 76px;
-    margin-top: 6px;
+  }
+
+  .logo-kicker {
+    margin-top: -2px;
+    margin-bottom: 7px;
+    font-size: 0.72rem;
   }
 
   .six .lydia-dp {
