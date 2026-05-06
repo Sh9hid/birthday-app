@@ -171,7 +171,23 @@ h1.one span:last-child {
 }
 
 .five .idea-5 {
-  font-size: 4rem;
+  font-size: clamp(1.45rem, 3.6vw, 2.35rem);
+  font-weight: 300;
+  line-height: 1.3;
+  margin: 0 auto;
+  max-width: min(820px, 88vw);
+  text-align: center;
+}
+
+.idea-5 span[data-node-name="text5Content"] {
+  display: block;
+  margin: 0 auto;
+}
+
+.idea-5 .smiley {
+  display: inline-block;
+  margin-top: 14px;
+  font-size: clamp(2.4rem, 6vw, 4rem);
 }
 
 .idea-5 span,
