@@ -24,6 +24,90 @@ const fetchData = () => {
     });
 };
 
+const confettiColors = ["#ff69b4", "#ffd166", "#7bdff2", "#b2f7ef", "#f7d6e0", "#ffffff", "#15a1ed"];
+
+const fireConfetti = options => {
+  if (!window.confetti) {
+    return;
+  }
+
+  window.confetti(Object.assign({
+    colors: confettiColors,
+    disableForReducedMotion: true
+  }, options));
+};
+
+const runPhotoConfetti = () => {
+  fireConfetti({
+    particleCount: 140,
+    spread: 74,
+    startVelocity: 36,
+    origin: { y: 0.62 }
+  });
+  fireConfetti({
+    particleCount: 70,
+    angle: 60,
+    spread: 55,
+    origin: { x: 0, y: 0.7 }
+  });
+  fireConfetti({
+    particleCount: 70,
+    angle: 120,
+    spread: 55,
+    origin: { x: 1, y: 0.7 }
+  });
+};
+
+const runFinaleConfetti = () => {
+  if (!window.confetti) {
+    return;
+  }
+
+  const end = Date.now() + 1800;
+
+  fireConfetti({
+    particleCount: 90,
+    spread: 82,
+    startVelocity: 42,
+    origin: { x: 0.5, y: 0.54 }
+  });
+
+  setTimeout(() => {
+    fireConfetti({
+      particleCount: 65,
+      angle: 58,
+      spread: 70,
+      startVelocity: 48,
+      origin: { x: 0.05, y: 0.76 }
+    });
+    fireConfetti({
+      particleCount: 65,
+      angle: 122,
+      spread: 70,
+      startVelocity: 48,
+      origin: { x: 0.95, y: 0.76 }
+    });
+  }, 240);
+
+  const rain = () => {
+    fireConfetti({
+      particleCount: 2,
+      startVelocity: 0,
+      ticks: 220,
+      gravity: 0.42,
+      scalar: 0.85,
+      spread: 90,
+      origin: { x: Math.random(), y: -0.05 }
+    });
+
+    if (Date.now() < end) {
+      requestAnimationFrame(rain);
+    }
+  };
+
+  setTimeout(rain, 520);
+};
+
 // Animation Timeline
 const animationTimeline = () => {
   // Spit chars that needs to be animated individually
@@ -214,27 +298,7 @@ const animationTimeline = () => {
       0.12
     )
     .call(() => {
-      if (window.confetti) {
-        window.confetti({
-          particleCount: 140,
-          spread: 74,
-          startVelocity: 36,
-          origin: { y: 0.62 },
-          colors: ["#15a1ed", "#ff69b4", "#ffd166", "#ffffff"]
-        });
-        window.confetti({
-          particleCount: 70,
-          angle: 60,
-          spread: 55,
-          origin: { x: 0, y: 0.7 }
-        });
-        window.confetti({
-          particleCount: 70,
-          angle: 120,
-          spread: 55,
-          origin: { x: 1, y: 0.7 }
-        });
-      }
+      runPhotoConfetti();
     })
     .from(
       ".lydia-dp",
@@ -292,18 +356,9 @@ const animationTimeline = () => {
       },
       "party"
     )
-    .staggerTo(
-      ".eight svg",
-      1.5,
-      {
-        visibility: "visible",
-        opacity: 0,
-        scale: 80,
-        repeat: 3,
-        repeatDelay: 1.4
-      },
-      0.3
-    )
+    .call(() => {
+      runFinaleConfetti();
+    }, null, null, "+=0.3")
     .to(".six", 0.5, {
       opacity: 0,
       y: 30,
