@@ -33,7 +33,8 @@ const fireConfetti = options => {
 
   window.confetti(Object.assign({
     colors: confettiColors,
-    disableForReducedMotion: true
+    disableForReducedMotion: true,
+    zIndex: 9999
   }, options));
 };
 
@@ -113,24 +114,6 @@ const runFinaleConfetti = () => {
   };
 
   setTimeout(rain, 520);
-};
-
-const playNameCelebration = () => {
-  const name = document.querySelector(".celebration-name");
-
-  if (!name) {
-    return;
-  }
-
-  name.classList.remove("animate__animated", "animate__jackInTheBox", "animate__heartBeat");
-  void name.offsetWidth;
-  name.classList.add("animate__animated", "animate__jackInTheBox");
-
-  setTimeout(() => {
-    name.classList.remove("animate__jackInTheBox");
-    void name.offsetWidth;
-    name.classList.add("animate__heartBeat");
-  }, 900);
 };
 
 // Animation Timeline
@@ -324,34 +307,7 @@ const animationTimeline = () => {
     )
     .call(() => {
       runPhotoConfetti();
-      playNameCelebration();
-    })
-    .fromTo(
-      ".celebration-name",
-      0.75,
-      {
-        opacity: 0,
-        scale: 0.55,
-        y: 20
-      },
-      {
-        opacity: 1,
-        scale: 1,
-        y: 0,
-        ease: Back.easeOut.config(1.7)
-      }
-    )
-    .to(
-      ".celebration-name",
-      0.45,
-      {
-        opacity: 0,
-        scale: 1.08,
-        y: -22,
-        ease: Power1.easeIn
-      },
-      "+=1"
-    )
+    }, null, null, "-=0.6")
     .from(
       ".lydia-dp",
       0.9,
@@ -410,12 +366,12 @@ const animationTimeline = () => {
     )
     .call(() => {
       runFinaleConfetti();
-    }, null, null, "+=0.3")
+    }, null, null, "party+=0.2")
     .to(".six", 0.5, {
       opacity: 0,
       y: 30,
       zIndex: "-1"
-    })
+    }, "+=2")
     .staggerFrom(".nine p", 1, ideaTextTrans, 1.2)
     .to(
       ".last-smile",

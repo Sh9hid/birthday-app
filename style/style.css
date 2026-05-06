@@ -105,26 +105,6 @@ h1.one span:last-child {
   margin: 0 auto;
 }
 
-.container > .celebration-name {
-  position: absolute;
-  top: 32vh;
-  left: 0;
-  right: 0;
-  z-index: 4;
-  opacity: 0;
-  pointer-events: none;
-  font-family: "Great Vibes", cursive;
-  font-size: clamp(6rem, 18vw, 12rem);
-  line-height: 1.12;
-  letter-spacing: 0;
-  transform-origin: 50% 50%;
-  background: linear-gradient(135deg, #101827, #185a9d 52%, #d43f8d);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  --animate-duration: 1.15s;
-}
-
 .three {
   font-size: 3rem;
 }
@@ -331,11 +311,6 @@ h1.one span:last-child {
     margin-top: -2px;
     margin-bottom: 7px;
     font-size: 0.72rem;
-  }
-
-  .container > .celebration-name {
-    top: 34vh;
-    font-size: clamp(5.5rem, 24vw, 7.4rem);
   }
 
   .six .lydia-dp {
